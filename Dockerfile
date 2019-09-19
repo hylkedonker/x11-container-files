@@ -12,31 +12,24 @@ RUN apt-get update && \
 
 RUN apt-get clean
 
+# The correct user and password id's are needed to authenticate with X11.
 RUN groupadd -g 10412 donkerhc
 RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
 RUN usermod -p 'x' donkerhc
-RUN mkdir -p -m 0755 /etc/sudoers.d
-RUN echo 'donkerhc ALL=NOPASSWD: ALL' > /etc/sudoers.d/noauto-donkerhc
-RUN chmod 0600 /etc/sudoers.d/noauto-donkerhc
+RUN chsh -s /bin/zsh donkerhc
+RUN mkdir -p /home/donkerhc/tmp
+RUN chown -R donkerhc /home/donkerhc
+
+RUN groupadd -g 10412 donkerhc
+RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
+RUN usermod -p 'x' donkerhc
 RUN chsh -s /bin/bash donkerhc
 RUN mkdir -p /home/donkerhc/tmp
 RUN chown -R donkerhc /home/donkerhc
 
-RUN groupadd -g 10462 muntingh
-RUN useradd -u 10462 -g 10462 -c "Gerhard Muntingh" muntingh
-RUN usermod -p 'x' muntingh
-RUN mkdir -p -m 0755 /etc/sudoers.d
-RUN echo 'muntingh ALL=NOPASSWD: ALL' > /etc/sudoers.d/noauto-muntingh
-RUN chmod 0600 /etc/sudoers.d/noauto-muntingh
-RUN chsh -s /bin/bash muntingh
-RUN mkdir -p /home/muntingh/tmp
-RUN chown -R muntingh /home/muntingh
-
 
 RUN mkdir -p /var/opt/thinlinc
 
-
 USER donkerhc
-ENV HOME /home/donkerhc
 WORKDIR /home/donkerhc
 CMD /usr/bin/xterm
