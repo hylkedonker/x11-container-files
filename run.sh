@@ -2,7 +2,8 @@
 CONTAINER_DISPLAY="0"
 CONTAINER_HOSTNAME="x11_container"
 
-# Create a directory for the socket
+# Create a directory for the socket, removing previous sessions if necessary.
+rm -rf display
 mkdir -p display/socket
 touch display/Xauthority
 
@@ -22,12 +23,14 @@ xauth -f display/Xauthority \
     add ${CONTAINER_HOSTNAME}/unix:${CONTAINER_DISPLAY} \
     MIT-MAGIC-COOKIE-1 ${AUTH_COOKIE}
 
-# Proxy with the :0 DISPLAY
-socat TCP4:localhost:60${DISPLAY_NUMBER} \
-    UNIX-LISTEN:display/socket/X${CONTAINER_DISPLAY} &
+socat UNIX-LISTEN:display/socket/X${CONTAINER_DISPLAY},fork \
+    TCP4:localhost:60${DISPLAY_NUMBER} &
 
-# Allow other users to read the file.
-chmod 777 display/Xauthority display/socket
+if [ ! -z "$1" ]; then
+    job="$@"
+else
+    job=("chromium-browser" "-v")
+fi
 
 docker run -ti --rm \
     -e DISPLAY=:${CONTAINER_DISPLAY} \
@@ -38,4 +41,4 @@ docker run -ti --rm \
     -u $(id -u):$(id -g) \
     --privileged \
     local/hylke \
-    xterm
+    ${job[@]}

@@ -20,14 +20,6 @@ RUN chsh -s /bin/zsh donkerhc
 RUN mkdir -p /home/donkerhc/tmp
 RUN chown -R donkerhc /home/donkerhc
 
-RUN groupadd -g 10412 donkerhc
-RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
-RUN usermod -p 'x' donkerhc
-RUN chsh -s /bin/bash donkerhc
-RUN mkdir -p /home/donkerhc/tmp
-RUN chown -R donkerhc /home/donkerhc
-
-
 RUN mkdir -p /var/opt/thinlinc
 
 USER donkerhc
