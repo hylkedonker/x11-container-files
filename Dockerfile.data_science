@@ -1,0 +1,30 @@
+FROM jupyter/datascience-notebook:1386e2046833
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+USER root
+
+# Tag packages by versions to prevent Dockerfile from ever breaking.
+RUN apt-get update && \
+    apt-get install -qq -y --no-install-recommends \
+    xauth=1:1.0.10-1 \
+    less=487-0.1 \
+    zsh=5.4.2-3ubuntu3.1
+
+RUN apt-get clean
+
+# Install python packages.
+RUN pip install ipdb==0.12.2
+
+# The correct user and password id's are needed to authenticate with X11.
+RUN groupadd -g 10412 donkerhc
+RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
+RUN usermod -p 'x' donkerhc
+RUN chsh -s /usr/bin/zsh donkerhc
+RUN mkdir -p /home/donkerhc/tmp
+RUN chown -R donkerhc /home/donkerhc
+
+RUN mkdir -p /var/opt/thinlinc
+
+USER jovyan
+WORKDIR /home/jovyan
