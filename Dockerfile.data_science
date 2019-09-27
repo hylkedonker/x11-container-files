@@ -14,17 +14,18 @@ RUN apt-get update && \
 RUN apt-get clean
 
 # Install python packages.
-RUN pip install ipdb==0.12.2
+RUN pip install ipdb==0.12.2 \
+    pyreadstat==0.2.9
 
 # The correct user and password id's are needed to authenticate with X11.
-RUN groupadd -g 10412 donkerhc
-RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
-RUN usermod -p 'x' donkerhc
-RUN chsh -s /usr/bin/zsh donkerhc
-RUN mkdir -p /home/donkerhc/tmp
-RUN chown -R donkerhc /home/donkerhc
+# RUN groupadd -g 10412 donkerhc
+# RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
+# RUN usermod -p 'x' donkerhc
+# RUN chsh -s /usr/bin/zsh donkerhc
+# RUN mkdir -p /home/donkerhc/tmp
+# RUN chown -R donkerhc /home/donkerhc
 
 RUN mkdir -p /var/opt/thinlinc
 
-USER jovyan
-WORKDIR /home/jovyan
+USER donkerhc
+WORKDIR /home/donkerhc
