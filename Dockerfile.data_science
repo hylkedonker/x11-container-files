@@ -9,7 +9,8 @@ RUN apt-get update && \
     apt-get install -qq -y --no-install-recommends \
     xauth=1:1.0.10-1 \
     less=487-0.1 \
-    zsh=5.4.2-3ubuntu3.1
+    zsh=5.4.2-3ubuntu3.1 \
+    graphviz=2.40.1-2
 
 RUN apt-get clean
 

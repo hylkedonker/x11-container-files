@@ -29,7 +29,7 @@ socat UNIX-LISTEN:display/socket/X${CONTAINER_DISPLAY},fork \
 if [ ! -z "$1" ]; then
     job="$@"
 else
-    job=("chromium-browser" "-v")
+    job=("local/hylke" "chromium-browser" "-v")
 fi
 
 docker run -ti --rm \
@@ -38,7 +38,7 @@ docker run -ti --rm \
     -v "${PWD}/display/Xauthority:$HOME/.Xauthority" \
     --hostname ${CONTAINER_HOSTNAME} \
     --cap-add=SYS_PTRACE \
+    -p 1080:1080 \
     -u $(id -u):$(id -g) \
     --privileged \
-    local/hylke \
     ${job[@]}
