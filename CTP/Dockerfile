@@ -46,6 +46,7 @@ COPY configsnippet.xml \
     ./
 RUN chmod +x merge_snippet.sh
 COPY PROJECTNAMEPsuedo.script "${SCRIPT_PATH}/${XNAT_PROJECT_ID}Psuedo.script"
+
 # 2) Configure files.
 # Generate snippet based on XNAT ip and project id.
 RUN cat configsnippet.xml | sed \

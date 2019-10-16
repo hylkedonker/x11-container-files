@@ -38,7 +38,6 @@ docker run -ti --rm \
     -v "${PWD}/display/Xauthority:$HOME/.Xauthority" \
     --hostname ${CONTAINER_HOSTNAME} \
     --cap-add=SYS_PTRACE \
-    -p 1080:1080 \
     -u $(id -u):$(id -g) \
     --privileged \
     ${job[@]}
