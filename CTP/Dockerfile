@@ -30,6 +30,26 @@ RUN cd /JavaPrograms && tar -xzf /ctp.tar.gz
 
 RUN chown -R donkerhc /JavaPrograms
 
+# Configure CTP.
+ARG XNAT_IP_ADDRESS=localhost
+ARG XNAT_PROJECT_ID=1234
+ARG SCRIPT_PATH=/JavaPrograms/CTP/scripts
+# 1) Copy configuration files.
+COPY configsnippet.xml \
+    PROJECTTriplet.script \
+    merge_snippet.sh \
+    ./
+RUN chmod +x merge_snippet.sh
+COPY PROJECTNAMEPsuedo.script "${SCRIPT_PATH}/${XNAT_PROJECT_ID}Psuedo.script"
+# 2) Configure files.
+# Generate and insert snippet in config.xml.
+RUN cat configsnippet.xml | sed -e "s/\[XNAT_IP_ADDRESS\]/${XNAT_IP_ADDRESS}/g" -e "s/PROJECT/${XNAT_PROJECT_ID}/g" > /tmp/configsnippet.xml
+RUN ./merge_snippet.sh "/tmp/configsnippet.xml" "/JavaPrograms/CTP/config.xml" \
+    > /tmp/config.xml
+RUN mv /tmp/config.xml /JavaPrograms/CTP/config.xml
+RUN cat PROJECTTriplet.script | sed -e "s/PROJECT/${XNAT_PROJECT_ID}/g" \
+    > "${SCRIPT_PATH}/${XNAT_PROJECT_ID}Triplet.script"
+
 RUN echo "donkerhc ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER donkerhc
