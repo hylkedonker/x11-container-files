@@ -34,6 +34,11 @@ RUN chown -R donkerhc /JavaPrograms
 ARG XNAT_IP_ADDRESS=localhost
 ARG XNAT_PROJECT_ID=1234
 ARG SCRIPT_PATH=/JavaPrograms/CTP/scripts
+
+# Mass import data from this location.
+RUN mkdir /mnt/import_root
+ARG IMPORT_FOLDER=/mnt/import_root
+
 # 1) Copy configuration files.
 COPY configsnippet.xml \
     PROJECTTriplet.script \
@@ -42,8 +47,14 @@ COPY configsnippet.xml \
 RUN chmod +x merge_snippet.sh
 COPY PROJECTNAMEPsuedo.script "${SCRIPT_PATH}/${XNAT_PROJECT_ID}Psuedo.script"
 # 2) Configure files.
-# Generate and insert snippet in config.xml.
-RUN cat configsnippet.xml | sed -e "s/\[XNAT_IP_ADDRESS\]/${XNAT_IP_ADDRESS}/g" -e "s/PROJECT/${XNAT_PROJECT_ID}/g" > /tmp/configsnippet.xml
+# Generate snippet based on XNAT ip and project id.
+RUN cat configsnippet.xml | sed \
+    -e "s/\[XNAT_IP_ADDRESS\]/${XNAT_IP_ADDRESS}/g" \
+    -e "s/PROJECT/${XNAT_PROJECT_ID}/g" \
+    -e 's|treeRoot=\".\+\"|treeRoot=\"'${IMPORT_FOLDER}'\"|' \
+    > /tmp/configsnippet.xml
+
+# Insert configuration snippet in config.xml.
 RUN ./merge_snippet.sh "/tmp/configsnippet.xml" "/JavaPrograms/CTP/config.xml" \
     > /tmp/config.xml
 RUN mv /tmp/config.xml /JavaPrograms/CTP/config.xml
