@@ -9,6 +9,7 @@ RUN apt-get update && \
     xauth=1:1.0.10-1 \
     less=487-0.1build1 \
     wget=1.20.1-1ubuntu4 \
+    dcmtk=3.6.4-2 \
     default-jdk=2:1.11-71
 
 RUN apt-get clean

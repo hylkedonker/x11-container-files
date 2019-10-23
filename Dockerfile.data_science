@@ -18,7 +18,8 @@ RUN apt-get clean
 RUN pip install ipdb==0.12.2 \
     pyreadstat==0.2.9 \
     xgboost==0.90 \
-    graphviz==0.13
+    graphviz==0.13 \
+    PyQt5==5.13.1 
 
 # The correct user and password id's are needed to authenticate with X11.
 # RUN groupadd -g 10412 donkerhc

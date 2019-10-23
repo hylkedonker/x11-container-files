@@ -8,4 +8,6 @@ ctp:
 		--build-arg XNAT_IP_ADDRESS=uaumcg1013.ux.umcg.intra \
 		--build-arg XNAT_PROJECT_ID=nelson-test \
 		-t local/ctp .
+gene:
+	$(DOCKER_BUILD) -f genetics/Dockerfile -t local/hylke_gene .
 #all: base data
