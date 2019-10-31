@@ -1,0 +1,46 @@
+<Pipeline name="PROJECT">
+
+    <ArchiveImportService
+        acceptFileObjects="no"
+        acceptXmlObjects="no"
+        acceptZipObjects="no"
+        class="org.rsna.ctp.stdstages.ArchiveImportService"
+        expandTARs="no"
+        fsName="..."
+        name="ArchiveImportService"
+        quarantine="PROJECT/archiveimport/quarantine-directory"
+        root="PROJECT/archiveimport/root-directory"
+        treeRoot="\\zkh.umcg.intra\archief\Nelson\[SUBDIR]" />
+
+    <PROJECT_lookup
+        name="Client lookup"
+        class="org.rsna.ctp.stdstages.DicomAnonymizer"
+        root="PROJECT/roots/client/lookup"
+        lookupTable="scripts/PROJECT-lookup-table.properties"
+        script="scripts/PROJECTLookup.script"
+        quarantine="PROJECT/quarantines/client/dicom-anonymizer" />
+
+   <PROJECT_pseudo
+        name="Client pseudo"
+        class="org.rsna.ctp.stdstages.DicomAnonymizer"
+        root="PROJECT/roots/client/pseudo"
+        lookupTable="scripts/lookup-table.properties"
+        script="scripts/PROJECTPseudo.script"
+        quarantine="PROJECT/quarantines/client/dicom-anonymizer" />
+
+   <PROJECT_triplet
+        name="Client triplet"
+        class="org.rsna.ctp.stdstages.DicomAnonymizer"
+        root="PROJECT/roots/client/dicom-triplet"
+        lookupTable="scripts/lookup-table.properties"
+        script="scripts/PROJECTTriplet.script"
+        quarantine="PROJECT/quarantines/client/dicom-anonymizer" />
+
+    <PROJECT_Export2Xnat
+        name="Client DICOM Export"
+        class="org.rsna.ctp.stdstages.DicomExportService"
+        root="PROJECT/roots/client/dicom-exportps"
+        url="dicom://XNAT:CTPACC0@[XNAT_IP_ADDRESS]:8104"
+        quarantine="PROJECT/quarantines/client/dicom-export" />
+
+</Pipeline>

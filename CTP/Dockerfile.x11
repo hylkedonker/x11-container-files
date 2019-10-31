@@ -5,11 +5,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG XNAT_IP_ADDRESS=localhost
 ARG XNAT_PROJECT_ID=1234
 ARG SCRIPT_PATH=/JavaPrograms/CTP/scripts
-ARG CONTAINER_USER=ctpuser
 
 # Tag packages by versions to prevent Dockerfile from ever breaking.
 RUN apt-get update && \
     apt-get install -qq -y --no-install-recommends \
+    xterm=330-1ubuntu3 \
+    xauth=1:1.0.10-1 \
     less=487-0.1build1 \
     wget=1.20.1-1ubuntu4 \
     dcmtk=3.6.4-2 \
@@ -17,16 +18,22 @@ RUN apt-get update && \
 
 RUN apt-get clean
 
-# Download an unzipped CTP installation (the CTP installer requires X11, which
-# we can't run in a Dockerfile).
+# The correct user and password id's are needed to authenticate with X11.
+RUN groupadd -g 10412 donkerhc
+RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
+RUN usermod -p 'x' donkerhc
+RUN chsh -s /bin/zsh donkerhc
+RUN mkdir -p /home/donkerhc/tmp
+RUN chown -R donkerhc /home/donkerhc
+
+# Download an unzipped CTP installation.
 ARG commit_hash=614eadd4d008399781ee6201a0c1e4a8583766ab
 RUN wget https://github.com/hylkedonker/x11-container-files/raw/${commit_hash}/CTP/ctp.tar.gz
 # Extract the installation in /JavaPrograms
 RUN mkdir -p /JavaPrograms
 RUN cd /JavaPrograms && tar -xzf /ctp.tar.gz
 
-RUN useradd ${CONTAINER_USER}
-RUN chown -R ${CONTAINER_USER} /JavaPrograms
+RUN chown -R donkerhc /JavaPrograms
 
 # Mass import data from this location (to be mounted in this location by `docker
 # run`).
@@ -56,6 +63,6 @@ RUN mv /tmp/config.xml /JavaPrograms/CTP/config.xml
 RUN cat PROJECTTriplet.script | sed -e "s/PROJECT/${XNAT_PROJECT_ID}/g" \
     > "${SCRIPT_PATH}/${XNAT_PROJECT_ID}Triplet.script"
 
-USER ${CONTAINER_USER}
+USER donkerhc
 WORKDIR /JavaPrograms/CTP
 CMD java -jar Runner.jar

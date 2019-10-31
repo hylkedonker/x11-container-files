@@ -1,0 +1,4 @@
+<script>
+ <p t="PROFILENAME">XNAT Test triplet generator</p>
+  <e en="T" t="00324000" n="StudyComments">@always()Project:PROJECT; Subject:@contents(PatientID); Session:@hash(StudyInstanceUID,18)</e>
+</script>
