@@ -39,5 +39,6 @@ docker run -ti --rm \
     --hostname ${CONTAINER_HOSTNAME} \
     --cap-add=SYS_PTRACE \
     -u $(id -u):$(id -g) \
+    --group-add nobody \
     --privileged \
     ${job[@]}

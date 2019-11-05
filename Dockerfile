@@ -14,6 +14,7 @@ RUN apt-get clean
 
 # The correct user and password id's are needed to authenticate with X11.
 RUN groupadd -g 10412 donkerhc
+RUN groupadd nobody
 RUN useradd -u 10412 -g 10412 -c "Hylke Donker" donkerhc
 RUN usermod -p 'x' donkerhc
 RUN chsh -s /bin/zsh donkerhc
