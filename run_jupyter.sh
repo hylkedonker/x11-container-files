@@ -1,6 +1,7 @@
 #!/bin/bash
 # Run 
-docker run -ti \
+#docker run -ti \
+docker run -d \
     -p 8888:8888 \
     -v $HOME/workspace/jupyter:$HOME \
     --rm \
