@@ -2,7 +2,7 @@ DOCKER_BUILD=docker build
 base:
 	$(DOCKER_BUILD) -f Dockerfile -t local/hylke .
 data:
-	$(DOCKER_BUILD) -f Dockerfile.data_science -t local/hylke_data .
+	$(DOCKER_BUILD) -f data_science/Dockerfile -t local/hylke_data .
 ctp:
 	cd CTP; $(DOCKER_BUILD) -f Dockerfile \
 		--build-arg XNAT_IP_ADDRESS=uaumcg1013.ux.umcg.intra \
