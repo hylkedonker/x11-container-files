@@ -10,4 +10,12 @@ ctp:
 		-t local/ctp .
 gene:
 	$(DOCKER_BUILD) -f genetics/Dockerfile -t local/hylke_gene .
+
+virtualbox:
+	$(DOCKER_BUILD) -f virtualbox/Dockerfile -t local/hylke_virtualbox .
+
+python2:
+
+	$(DOCKER_BUILD) -f Python2/Dockerfile -t local/py2 .
+	$(DOCKER_BUILD) -f PyDeep/Dockerfile -t local/pydeep .
 #all: base data

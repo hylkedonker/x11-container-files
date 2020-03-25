@@ -8,6 +8,8 @@ RUN apt-get update && \
     xauth=1:1.0.10-1 \
     less=487-0.1build1 \
     sudo=1.8.27-1ubuntu1 \
+    samtools=1.9-4 \
+    bcftools=1.9-1 \
     bedtools=2.27.1+dfsg-4 \
     zsh=5.5.1-1ubuntu3
 
